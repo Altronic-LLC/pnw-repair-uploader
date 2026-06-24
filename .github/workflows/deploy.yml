@@ -1,0 +1,53 @@
+name: Deploy to GitHub Pages
+
+# Builds the static SPA and publishes it to GitHub Pages on every push to main.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; cancel in-progress runs on a new push.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      VITE_USE_MOCK: "false"
+      # --- Set these as repo Variables (Settings → Secrets and variables →
+      # Actions → Variables). None are secret: a PKCE public client has no
+      # client secret, and IDs are safe in a static bundle. ---
+      VITE_BASE_PATH: "/${{ github.event.repository.name }}/"
+      VITE_AZURE_TENANT_ID: ${{ vars.VITE_AZURE_TENANT_ID }}
+      VITE_AZURE_CLIENT_ID: ${{ vars.VITE_AZURE_CLIENT_ID }}
+      VITE_SP_SITE_ID: ${{ vars.VITE_SP_SITE_ID }}
+      VITE_SP_DRIVE_ID: ${{ vars.VITE_SP_DRIVE_ID }}
+      VITE_SP_ROOT_FOLDER: ${{ vars.VITE_SP_ROOT_FOLDER }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

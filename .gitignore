@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+*.local
+# Local-only real SharePoint snapshot (contains real customer/job folder
+# names) — never commit. The app falls back to synthetic mock data without it.
+*.local.json
+.env
+.env.local
+.env.*.local
+.DS_Store
+*.log
+coverage
+.vite
