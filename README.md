@@ -71,10 +71,9 @@ in responsive grids; the camera and naming modal fill any viewport.
 
 ---
 
-## Architecture (mirrors the ARC platform)
+## Architecture
 
-This app deliberately reuses the proven patterns from the **ARC** codebase
-(the sibling Altronic platform):
+This is a standalone app in its own repository. Its core patterns:
 
 - **The `USE_MOCK` boundary.** Every Graph call lives in `src/api/library.ts`
   and branches on `USE_MOCK` (`src/api/config.ts`). Nothing else in the app
@@ -144,8 +143,8 @@ Collection Documents", "Site Collection Images".
 1. **Azure Portal → Entra ID → App registrations → New registration.**
    - Supported account types: **single tenant**.
    - Platform: **Single-page application (SPA)**.
-   - Redirect URI: the app's base URL, e.g.
-     `https://<org>.github.io/<repo-name>/`
+   - Redirect URI: the app's base URL —
+     `https://altronic-llc.github.io/pnw-repair-uploader/`
      (and `http://localhost:5173/` for local dev).
 2. Note the **Application (client) ID** and **Directory (tenant) ID** →
    `VITE_AZURE_CLIENT_ID` / `VITE_AZURE_TENANT_ID`.
@@ -201,15 +200,18 @@ unset), and optionally `VITE_SP_ROOT_FOLDER` to open the app at a sub-path.
 
 ### 5. GitHub Pages
 
-- Create the repo, push this code.
+Repo: <https://github.com/Altronic-LLC/pnw-repair-uploader> ·
+Live URL: `https://altronic-llc.github.io/pnw-repair-uploader/`
+
+- Push this code to the repo's `main` branch.
 - **Settings → Pages → Build and deployment → Source: GitHub Actions.**
 - **Settings → Secrets and variables → Actions → Variables:** add
   `VITE_AZURE_TENANT_ID`, `VITE_AZURE_CLIENT_ID`, `VITE_SP_SITE_ID`, and
   (optional) `VITE_SP_DRIVE_ID`, `VITE_SP_ROOT_FOLDER`.
 - The included workflow (`.github/workflows/deploy.yml`) sets
-  `VITE_USE_MOCK=false` and `VITE_BASE_PATH=/<repo-name>/` automatically.
-- Add `https://<org>.github.io/<repo-name>/` as a redirect URI on the Entra
-  app registration (step 1).
+  `VITE_USE_MOCK=false` and `VITE_BASE_PATH=/pnw-repair-uploader/` automatically.
+- Add `https://altronic-llc.github.io/pnw-repair-uploader/` as a redirect URI on
+  the Entra app registration (step 1).
 
 ---
 

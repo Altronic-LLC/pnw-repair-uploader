@@ -13,22 +13,22 @@ export function UploadQueue({ uploads, onRemove, onRetry }: UploadQueueProps) {
   return (
     <ul className="space-y-2">
       {uploads.map((u) => (
-        <li key={u.localId} className="flex items-center gap-3 rounded-lg bg-white/5 p-2">
+        <li key={u.localId} className="flex items-center gap-3 rounded-lg border border-border bg-surface p-2">
           <img src={u.previewUrl} alt="" className="h-12 w-12 shrink-0 rounded object-cover" />
           <div className="min-w-0 flex-1">
             <div className="truncate text-sm">{u.fileName}</div>
             {u.status === "uploading" && (
-              <div className="mt-1 h-1.5 overflow-hidden rounded bg-white/10">
+              <div className="mt-1 h-1.5 overflow-hidden rounded bg-surface-3">
                 <div className="h-full bg-accent transition-all" style={{ width: `${u.progress}%` }} />
               </div>
             )}
             {u.status === "error" && (
-              <div className="truncate text-xs text-red-400" title={u.error}>
+              <div className="truncate text-xs text-red-500 dark:text-red-400" title={u.error}>
                 {u.error ?? "Upload failed"}
               </div>
             )}
-            {u.status === "done" && <div className="text-xs text-green-400">Uploaded</div>}
-            {u.status === "queued" && <div className="text-xs text-neutral-500">Waiting…</div>}
+            {u.status === "done" && <div className="text-xs text-green-600 dark:text-green-400">Uploaded</div>}
+            {u.status === "queued" && <div className="text-xs text-fg-subtle">Waiting…</div>}
           </div>
 
           <StatusIcon status={u.status} />
@@ -37,7 +37,7 @@ export function UploadQueue({ uploads, onRemove, onRetry }: UploadQueueProps) {
             <button
               onClick={() => onRetry(u.localId)}
               aria-label="Retry upload"
-              className="rounded-lg p-2 text-neutral-300 active:bg-white/5"
+              className="rounded-lg p-2 text-fg-muted active:bg-surface-3"
             >
               <RotateCw className="h-4 w-4" />
             </button>
@@ -46,7 +46,7 @@ export function UploadQueue({ uploads, onRemove, onRetry }: UploadQueueProps) {
             <button
               onClick={() => onRemove(u.localId)}
               aria-label="Remove from list"
-              className="rounded-lg p-2 text-neutral-500 active:bg-white/5"
+              className="rounded-lg p-2 text-fg-subtle active:bg-surface-3"
             >
               <Trash2 className="h-4 w-4" />
             </button>

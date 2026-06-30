@@ -24,18 +24,18 @@ export function FolderPicker({ parentPath, onOpen }: FolderPickerProps) {
   );
 
   if (isLoading) {
-    return <p className="p-6 text-center text-neutral-400">Loading folders…</p>;
+    return <p className="p-6 text-center text-fg-muted">Loading folders…</p>;
   }
   if (isError) {
     return (
-      <p className="p-6 text-center text-red-400">
+      <p className="p-6 text-center text-red-500 dark:text-red-400">
         Couldn’t load folders: {(error as Error).message}
       </p>
     );
   }
   if (!visible.length) {
     return (
-      <p className="p-6 text-center text-neutral-500">No folders available here.</p>
+      <p className="p-6 text-center text-fg-subtle">No folders available here.</p>
     );
   }
 
@@ -49,14 +49,14 @@ export function FolderPicker({ parentPath, onOpen }: FolderPickerProps) {
               <div
                 aria-disabled="true"
                 title="Not available on this device"
-                className="flex w-full cursor-not-allowed items-center gap-3 rounded-xl border border-white/5 bg-white/[0.01] px-4 py-4 text-left opacity-40"
+                className="flex w-full cursor-not-allowed items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-4 text-left opacity-60"
               >
-                <Folder className="h-6 w-6 shrink-0 text-neutral-500" />
+                <Folder className="h-6 w-6 shrink-0 text-fg-subtle" />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate font-medium text-neutral-400">{f.name}</span>
-                  <span className="text-xs text-neutral-600">Locked</span>
+                  <span className="block truncate font-medium text-fg-muted">{f.name}</span>
+                  <span className="text-xs text-fg-faint">Locked</span>
                 </span>
-                <Lock className="h-4 w-4 shrink-0 text-neutral-600" />
+                <Lock className="h-4 w-4 shrink-0 text-fg-faint" />
               </div>
             </li>
           );
@@ -65,14 +65,14 @@ export function FolderPicker({ parentPath, onOpen }: FolderPickerProps) {
           <li key={f.id}>
             <button
               onClick={() => onOpen(f.path)}
-              className="flex w-full items-center gap-3 rounded-xl border border-white/5 bg-white/[0.03] px-4 py-4 text-left active:bg-white/5"
+              className="flex w-full items-center gap-3 rounded-xl border border-border bg-surface px-4 py-4 text-left shadow-sm transition-colors hover:border-fg-faint active:bg-surface-2"
             >
               <Folder className="h-6 w-6 shrink-0 text-accent" />
               <span className="min-w-0 flex-1">
                 <span className="block truncate font-medium">{f.name}</span>
-                <span className="text-xs text-neutral-500">{f.childCount} items</span>
+                <span className="text-xs text-fg-subtle">{f.childCount} items</span>
               </span>
-              <ChevronRight className="h-5 w-5 shrink-0 text-neutral-500" />
+              <ChevronRight className="h-5 w-5 shrink-0 text-fg-subtle" />
             </button>
           </li>
         );

@@ -1,5 +1,6 @@
 import { Camera, RotateCcw, Check, X, Image as ImageIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Portal } from "./Portal";
 
 interface CameraCaptureProps {
   /** Called with a captured/selected image blob and a suggested file name. */
@@ -117,7 +118,8 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-black">
+    <Portal>
+    <div className="fixed inset-0 z-[100] flex flex-col bg-black">
       <div className="flex items-center justify-between p-3">
         <span className="text-sm font-medium text-white/80">Camera</span>
         <button onClick={onClose} aria-label="Close camera" className="rounded-full p-2 text-white/80">
@@ -184,6 +186,7 @@ export function CameraCapture({ onCapture, onClose }: CameraCaptureProps) {
         className="hidden"
       />
     </div>
+    </Portal>
   );
 }
 

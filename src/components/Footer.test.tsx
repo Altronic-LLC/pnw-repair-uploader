@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Footer } from "./Footer";
 import { CHANGELOG, CURRENT_VERSION } from "@/data/changelog";
@@ -42,9 +42,12 @@ describe("Footer", () => {
 
   it("clears the NEW badge once history is opened", async () => {
     const { rerender } = render(<Footer />);
-    expect(screen.getByText(/new/i)).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: new RegExp(`v${CURRENT_VERSION}`) }));
+    const versionBtn = () =>
+      screen.getByRole("button", { name: new RegExp(`v${CURRENT_VERSION}`) });
+    // Scope to the version button so we don't match "new" inside the changelog.
+    expect(within(versionBtn()).getByText("New")).toBeInTheDocument();
+    await userEvent.click(versionBtn());
     rerender(<Footer />);
-    expect(screen.queryByText(/new/i)).not.toBeInTheDocument();
+    expect(within(versionBtn()).queryByText("New")).not.toBeInTheDocument();
   });
 });

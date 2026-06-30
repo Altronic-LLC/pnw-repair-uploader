@@ -22,6 +22,49 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "0.11.0",
+    date: "2026-06-24",
+    changes: [
+      "Only photos can be opened now — tap an image to view it full-screen in the app.",
+      "Other files (PDFs, reports) still show in the folder so you can see what's there, but they no longer open. The app is focused on uploading images.",
+      "Nothing leaves the app to SharePoint anymore — viewing stays entirely inside the kiosk.",
+    ],
+  },
+  {
+    version: "0.10.0",
+    date: "2026-06-24",
+    changes: [
+      "Added a Sign in / Sign out button in the top-right of the header.",
+      "Light mode now has clearer contrast — folders and cards stand out from the background.",
+      "Pop-up dialogs now have a solid background in both light and dark mode.",
+      "Pop-up dialogs now always appear in front of everything else on screen.",
+    ],
+  },
+  {
+    version: "0.9.0",
+    date: "2026-06-24",
+    changes: [
+      "Added light and dark mode. A Light/Dark button in the footer switches between them.",
+      "On first launch the app follows your device's light/dark setting; once you pick one, your choice is remembered.",
+    ],
+  },
+  {
+    version: "0.8.0",
+    date: "2026-06-24",
+    changes: [
+      "You can now open photos: tap an image in a folder to view it full-screen inside the app, without leaving the kiosk.",
+      "Non-image files (PDFs, reports) open in SharePoint in a new tab when available.",
+    ],
+  },
+  {
+    version: "0.7.0",
+    date: "2026-06-24",
+    changes: [
+      "The full folder path now shows while navigating, as a breadcrumb — tap any part to jump back up to that level.",
+      "Photos upload into whatever folder you currently have open; the destination folder is now shown above the Take photo button and in the naming dialog.",
+    ],
+  },
+  {
     version: "0.6.0",
     date: "2026-06-24",
     changes: [

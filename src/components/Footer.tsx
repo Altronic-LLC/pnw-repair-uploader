@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { History, Info, X } from "lucide-react";
 import { CHANGELOG, CURRENT_VERSION } from "@/data/changelog";
 import { InfoModal } from "./InfoModal";
+import { Portal } from "./Portal";
+import { ThemeToggle } from "./ThemeToggle";
 
 const MAINTAINER_EMAIL = "ray.white@altronic-llc.com";
 const VERSION_SEEN_KEY = "pnw-uploader-version-seen";
@@ -31,22 +33,24 @@ export function Footer() {
 
   return (
     <>
-      <footer className="border-t border-white/5">
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-2 px-4 py-3 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
+      <footer className="border-t border-border">
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-2 px-4 py-3 text-xs text-fg-subtle sm:flex-row sm:items-center sm:justify-between">
           <span>
             Managed by{" "}
             <a
               href={`mailto:${MAINTAINER_EMAIL}`}
-              className="font-medium text-neutral-300 underline-offset-2 hover:text-accent hover:underline"
+              className="font-medium text-fg-muted underline-offset-2 hover:text-accent hover:underline"
             >
               {MAINTAINER_EMAIL}
             </a>
           </span>
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
+            <ThemeToggle />
+
             <button
               onClick={() => setShowInfo(true)}
-              className="inline-flex items-center gap-1.5 rounded-md border border-white/10 px-2.5 py-1 text-[11px] text-neutral-400 transition-colors hover:border-white/20 hover:text-neutral-200"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-[11px] text-fg-subtle transition-colors hover:border-fg-faint hover:text-fg"
             >
               <Info className="h-3 w-3" />
               Info
@@ -57,7 +61,7 @@ export function Footer() {
               className={
                 "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 font-mono text-[11px] transition-colors " +
                 (versionSeen
-                  ? "border-white/10 text-neutral-400 hover:border-white/20 hover:text-neutral-200"
+                  ? "border-border text-fg-subtle hover:border-fg-faint hover:text-fg"
                   : "border-accent text-accent hover:opacity-90")
               }
             >
@@ -81,20 +85,21 @@ export function Footer() {
 
 function ChangelogModal({ onClose }: { onClose: () => void }) {
   return (
+    <Portal>
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-overlay p-4"
       onClick={onClose}
     >
       <div
-        className="max-h-[80vh] w-full max-w-lg overflow-hidden rounded-2xl bg-neutral-900 shadow-2xl ring-1 ring-white/10"
+        className="max-h-[80vh] w-full max-w-lg overflow-hidden rounded-2xl bg-surface shadow-2xl ring-1 ring-border"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
           <h2 className="text-lg font-semibold">Version history</h2>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="rounded-full p-2 text-neutral-400 active:bg-white/5"
+            className="rounded-full p-2 text-fg-muted active:bg-surface-3"
           >
             <X className="h-5 w-5" />
           </button>
@@ -103,12 +108,12 @@ function ChangelogModal({ onClose }: { onClose: () => void }) {
         <div className="max-h-[calc(80vh-3.5rem)] overflow-y-auto px-5 py-4">
           <div className="flex flex-col gap-5">
             {CHANGELOG.map((entry) => (
-              <div key={entry.version} className="border-b border-white/10 pb-4 last:border-b-0 last:pb-0">
+              <div key={entry.version} className="border-b border-border pb-4 last:border-b-0 last:pb-0">
                 <div className="mb-2 flex items-baseline gap-3">
                   <span className="text-base font-semibold">v{entry.version}</span>
-                  <span className="text-xs text-neutral-500">{entry.date}</span>
+                  <span className="text-xs text-fg-subtle">{entry.date}</span>
                 </div>
-                <ul className="ml-5 list-disc space-y-1 text-sm text-neutral-200">
+                <ul className="ml-5 list-disc space-y-1 text-sm text-fg-muted">
                   {entry.changes.map((c, i) => (
                     <li key={i}>{c}</li>
                   ))}
@@ -119,5 +124,6 @@ function ChangelogModal({ onClose }: { onClose: () => void }) {
         </div>
       </div>
     </div>
+    </Portal>
   );
 }

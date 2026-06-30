@@ -2,9 +2,9 @@
 // API configuration — single source of truth for "where does the data come
 // from" decisions. Read from Vite env vars at build time.
 //
-// Mirrors the ARC platform's USE_MOCK boundary: every Graph call branches on
-// USE_MOCK so the UI can be built and demoed against mock data before the real
-// SharePoint library / Entra app registration exists.
+// The USE_MOCK boundary: every Graph call branches on USE_MOCK so the UI can be
+// built and demoed against mock data before the real SharePoint library / Entra
+// app registration exists.
 // =============================================================================
 
 export const USE_MOCK = import.meta.env.VITE_USE_MOCK !== "false";

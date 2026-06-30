@@ -8,14 +8,14 @@
 // =============================================================================
 
 /** GitHub repo URL — set once the repo exists; null shows "not yet created". */
-export const REPO_URL: string | null = null;
+export const REPO_URL: string | null = "https://github.com/Altronic-LLC/pnw-repair-uploader";
 
 export const MAINTAINER_EMAIL = "ray.white@altronic-llc.com";
 
 export const APP_DESCRIPTION = [
   "PNW Repair Uploader is a single-purpose kiosk web app for a locked-down device at PNW Repair.",
   "A technician signs in once with a Microsoft (Entra) service account, picks a folder in the SharePoint “Cooper Downstream” document library, launches the device camera from inside the app, names the photo, and uploads it straight into that folder via Microsoft Graph.",
-  "It is a static single-page app (no backend) hosted on GitHub Pages, and a sibling of the ARC platform — it reuses ARC's patterns but shares no code.",
+  "It is a standalone static single-page app (no backend) hosted on GitHub Pages.",
 ];
 
 export const HOW_IT_WORKS = [
@@ -24,6 +24,7 @@ export const HOW_IT_WORKS = [
   "Capture — the in-app camera (getUserMedia live preview → JPEG) takes a photo, with a native file-picker fallback.",
   "Name & validate — a dialog names the file and blocks duplicate names (case-insensitive) and illegal characters before upload.",
   "Upload — small files use a single PUT; large photos use a resumable chunked upload session with a progress bar. Failures show a clear error + Retry.",
+  "View — tap an existing photo to preview it full-screen inside the app (fetched via Graph). Other file types (PDFs, reports) are listed for context but aren't openable — the kiosk is for uploading images.",
 ];
 
 export const SECURITY_MODEL = [
@@ -55,10 +56,17 @@ export const PROJECT_STRUCTURE: StructureItem[] = [
   { path: "src/api/library.ts", desc: "Folder list / file list / upload — mock + real branches" },
   { path: "src/auth/", desc: "MSAL config, provider, sign-in gate, sign-in page" },
   { path: "src/hooks/useLibrary.ts", desc: "useFolders / useFiles / useUpload (React Query)" },
+  { path: "src/hooks/useTheme.ts", desc: "Light/dark theme state + live OS-preference tracking" },
+  { path: "src/lib/theme.ts", desc: "Theme persistence + resolve/apply (light/dark/system)" },
+  { path: "src/components/ThemeToggle.tsx", desc: "Footer Light/Dark switch" },
+  { path: "src/components/Portal.tsx", desc: "Renders overlays into <body> so modals sit above everything" },
   { path: "src/components/CameraCapture.tsx", desc: "getUserMedia camera capture + file fallback" },
   { path: "src/components/NameImageModal.tsx", desc: "Name-the-photo dialog with dedupe + validation" },
+  { path: "src/components/ImagePreviewModal.tsx", desc: "In-app full-screen image preview (lightbox)" },
   { path: "src/components/UploadQueue.tsx", desc: "Per-file upload progress / status / retry" },
   { path: "src/components/FolderPicker.tsx", desc: "Browse permitted folders (responsive grid)" },
+  { path: "src/components/Breadcrumb.tsx", desc: "Full folder path trail; tap a crumb to jump up" },
+  { path: "src/lib/folderRules.ts", desc: "Kiosk navigation rules (locking, JOB-only, upload gating)" },
   { path: "src/views/UploadView.tsx", desc: "The whole flow: navigate → capture → name → upload" },
   { path: "src/data/mockData.ts", desc: "Mock library (real local snapshot if present, else synthetic)" },
   { path: "src/data/changelog.ts", desc: "Version history (drives footer version + history modal)" },

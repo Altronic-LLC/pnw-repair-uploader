@@ -10,13 +10,31 @@
 import type { LibraryFile, LibraryFolder } from "@/types/library";
 import { mockFiles, mockFolders, mockUpload } from "@/data/mockData";
 import { SP_DRIVE_ID, SP_ROOT_FOLDER, SP_SITE_ID, USE_MOCK } from "./config";
-import { graphFetchAll, graphFetchRaw } from "./graph";
+import { graphFetch, graphFetchAll, graphFetchRaw } from "./graph";
 
 // 4 MB — Graph's simple-upload ceiling. Above this we must use an upload
 // session (chunked). Camera photos routinely exceed this.
 const SIMPLE_UPLOAD_MAX = 4 * 1024 * 1024;
 // Upload-session chunk size must be a multiple of 320 KiB per Graph docs.
 const CHUNK_SIZE = 5 * 320 * 1024; // 1,600 KiB
+
+/**
+ * Fetch a file's bytes for in-app preview. Uses the driveItem's short-lived,
+ * pre-authenticated @microsoft.graph.downloadUrl (so we don't send our bearer
+ * token to the storage host). Returns null in mock mode — there are no real
+ * bytes behind the mock metadata, so the preview shows a placeholder.
+ */
+export async function fetchFileBlob(file: LibraryFile): Promise<Blob | null> {
+  if (USE_MOCK) return null;
+  const item = await graphFetch<Record<string, unknown>>(
+    `${driveBase()}/items/${file.id}`,
+  );
+  const downloadUrl = item["@microsoft.graph.downloadUrl"] as string | undefined;
+  if (!downloadUrl) return null;
+  const res = await fetch(downloadUrl);
+  if (!res.ok) throw new Error(`Couldn't load file (${res.status})`);
+  return res.blob();
+}
 
 /** Base Graph path to the target drive (explicit drive ID or the site default). */
 function driveBase(): string {

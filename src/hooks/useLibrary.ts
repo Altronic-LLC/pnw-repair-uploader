@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { listFiles, listFolders, uploadFile } from "@/api/library";
+import { fetchFileBlob, listFiles, listFolders, uploadFile } from "@/api/library";
 import type { LibraryFile } from "@/types/library";
 
 /** Subfolders under a given path (defaults to the configured root). */
@@ -16,6 +16,16 @@ export function useFiles(folderPath: string | null) {
     queryKey: ["files", folderPath],
     queryFn: () => listFiles(folderPath as string),
     enabled: folderPath != null,
+  });
+}
+
+/** Fetch a file's bytes for preview. Returns null in mock mode (no real bytes). */
+export function useFileBlob(file: LibraryFile | null) {
+  return useQuery({
+    queryKey: ["fileBlob", file?.id],
+    queryFn: () => fetchFileBlob(file as LibraryFile),
+    enabled: file != null,
+    staleTime: 5 * 60_000,
   });
 }
 

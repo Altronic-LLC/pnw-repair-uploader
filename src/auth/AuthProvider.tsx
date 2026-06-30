@@ -77,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   if (state.kind === "pending") {
     return (
-      <div className="flex h-full items-center justify-center text-neutral-400">
+      <div className="flex h-full items-center justify-center text-fg-muted">
         Initialising sign-in…
       </div>
     );
@@ -88,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       <div className="flex h-full items-center justify-center px-6 text-center">
         <div className="max-w-sm">
           <h1 className="text-lg font-semibold">Sign-in failed to start</h1>
-          <p className="mt-2 text-sm text-neutral-400">{state.error.message}</p>
+          <p className="mt-2 text-sm text-fg-muted">{state.error.message}</p>
           <button
             onClick={() => window.location.reload()}
             className="mt-6 rounded-md bg-accent px-4 py-2 text-sm font-medium text-white"

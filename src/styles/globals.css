@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Theme tokens. Light is the default (:root); the `dark` class on <html>
+ * (set by src/lib/theme.ts) swaps in the dark values. Tailwind maps these to
+ * semantic utilities (bg-surface, text-fg-muted, border-border, …) — see
+ * tailwind.config.js.
+ */
+:root {
+  --bg: #f4f4f5; /* zinc-100 — page */
+  --fg: #18181b; /* zinc-900 */
+  --fg-muted: #3f3f46; /* zinc-700 */
+  --fg-subtle: #52525b; /* zinc-600 */
+  --fg-faint: #71717a; /* zinc-500 */
+  --surface: #ffffff; /* cards/modals — sits above the page */
+  --surface-2: #e4e4e7; /* zinc-200 — inputs, chips, fills */
+  --surface-3: #d4d4d8; /* zinc-300 — hover/active */
+  --border: #d4d4d8; /* zinc-300 — visible hairline */
+  --overlay: #27272a; /* zinc-800 — solid modal backdrop */
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0b0b0c;
+  --fg: #fafafa;
+  --fg-muted: #a3a3a3; /* neutral-400 */
+  --fg-subtle: #737373; /* neutral-500 */
+  --fg-faint: #525252; /* neutral-600 */
+  --surface: #171717; /* neutral-900 */
+  --surface-2: #262626; /* neutral-800 */
+  --surface-3: #404040; /* neutral-700 */
+  --border: #2a2a2a;
+  --overlay: #000000; /* solid modal backdrop */
+  color-scheme: dark;
+}
+
 html,
 body,
 #root {
@@ -10,8 +44,8 @@ body,
 
 body {
   margin: 0;
-  background: #0b0b0c;
-  color: #f5f5f5;
+  background: var(--bg);
+  color: var(--fg);
   -webkit-font-smoothing: antialiased;
   /* Kiosk: prevent text selection and the iOS long-press callout. */
   -webkit-user-select: none;

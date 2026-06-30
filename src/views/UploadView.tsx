@@ -1,13 +1,16 @@
-import { Camera, ChevronLeft, FileText } from "lucide-react";
+import { Camera, ChevronLeft, FileText, Image as ImageIcon } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import { CameraCapture } from "@/components/CameraCapture";
 import { FolderPicker } from "@/components/FolderPicker";
+import { ImagePreviewModal } from "@/components/ImagePreviewModal";
 import { NameImageModal } from "@/components/NameImageModal";
 import { UploadQueue } from "@/components/UploadQueue";
 import { useFiles, useUpload } from "@/hooks/useLibrary";
 import { SP_ROOT_FOLDER } from "@/api/config";
 import { canUploadHere, showFilesHere } from "@/lib/folderRules";
-import type { PendingUpload } from "@/types/library";
+import { isImageFile } from "@/lib/fileTypes";
+import type { LibraryFile, PendingUpload } from "@/types/library";
 
 interface Captured {
   blob: Blob;
@@ -30,6 +33,7 @@ export function UploadView() {
   const [path, setPath] = useState<string>(SP_ROOT_FOLDER);
   const [cameraOpen, setCameraOpen] = useState(false);
   const [captured, setCaptured] = useState<Captured | null>(null);
+  const [previewFile, setPreviewFile] = useState<LibraryFile | null>(null);
   const [uploads, setUploads] = useState<PendingUpload[]>([]);
   const idRef = useRef(0);
 
@@ -112,23 +116,21 @@ export function UploadView() {
   }
 
   const atRoot = path === SP_ROOT_FOLDER;
-  const folderName = path.split("/").filter(Boolean).pop() ?? "Library";
+  const folderName = path.split("/").filter(Boolean).pop() ?? "Cooper Downstream";
 
   return (
     <div className="mx-auto flex h-full w-full max-w-3xl flex-col">
-      {/* Breadcrumb / back */}
-      <div className="flex items-center gap-3 border-b border-white/5 px-4 py-3">
+      {/* Back + full folder path */}
+      <div className="flex items-start gap-3 border-b border-border px-4 py-3">
         {!atRoot && (
           <button
             onClick={() => setPath(parentOf(path, SP_ROOT_FOLDER))}
-            className="flex items-center gap-1 text-sm text-neutral-300 active:opacity-70"
+            className="mt-0.5 flex shrink-0 items-center gap-1 text-sm text-fg-muted active:opacity-70"
           >
             <ChevronLeft className="h-5 w-5" /> Back
           </button>
         )}
-        <span className="truncate text-base font-medium sm:text-lg">
-          {atRoot ? "Cooper Downstream" : folderName}
-        </span>
+        <Breadcrumb path={path} rootLabel="Cooper Downstream" onNavigate={setPath} />
       </div>
 
       <div className="flex-1 overflow-y-auto pb-2">
@@ -138,27 +140,24 @@ export function UploadView() {
         <div className="space-y-5 p-4">
           {filesVisible && (
             <section>
-              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">
+              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-fg-subtle">
                 In this folder
               </h2>
               {files?.length ? (
                 <ul className="grid grid-cols-1 gap-1 sm:grid-cols-2">
                   {files.map((f) => (
-                    <li key={f.id} className="flex items-center gap-2 text-sm text-neutral-300">
-                      <FileText className="h-4 w-4 shrink-0 text-neutral-500" />
-                      <span className="truncate">{f.name}</span>
-                    </li>
+                    <FileItem key={f.id} file={f} onPreview={setPreviewFile} />
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-neutral-500">No files yet.</p>
+                <p className="text-sm text-fg-subtle">No files yet.</p>
               )}
             </section>
           )}
 
           {uploads.length > 0 && (
             <section>
-              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">
+              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-fg-subtle">
                 This session
               </h2>
               <UploadQueue uploads={uploads} onRemove={removeUpload} onRetry={retryUpload} />
@@ -167,9 +166,14 @@ export function UploadView() {
         </div>
       </div>
 
-      {/* Capture button — only inside a sub-folder of _OPEN JOBS. */}
+      {/* Capture button — only inside a job's "Job" folder or deeper. Uploads
+          go into whatever folder is currently open. */}
       {canUploadHere(path) && (
-        <div className="border-t border-white/5 p-4">
+        <div className="border-t border-border p-4">
+          <p className="mb-2 text-center text-xs text-fg-subtle">
+            Photo will be saved to{" "}
+            <span className="font-medium text-fg">{folderName}</span>
+          </p>
           <button
             onClick={() => setCameraOpen(true)}
             className="mx-auto flex w-full max-w-md items-center justify-center gap-3 rounded-xl bg-accent py-4 text-lg font-semibold text-white active:scale-[0.98]"
@@ -187,12 +191,50 @@ export function UploadView() {
         <NameImageModal
           suggestedName={captured.suggestedName}
           previewUrl={captured.previewUrl}
+          destination={folderName}
           existingNames={existingNames}
           onConfirm={confirmName}
           onCancel={cancelName}
         />
       )}
+
+      {previewFile && (
+        <ImagePreviewModal file={previewFile} onClose={() => setPreviewFile(null)} />
+      )}
     </div>
+  );
+}
+
+/**
+ * One file row. Only images are openable (in-app lightbox) — this is an
+ * upload kiosk, so other files (PDFs, reports) are listed for context but are
+ * deliberately non-interactive and never navigate the device away.
+ */
+function FileItem({
+  file,
+  onPreview,
+}: {
+  file: LibraryFile;
+  onPreview: (file: LibraryFile) => void;
+}) {
+  if (isImageFile(file.name)) {
+    return (
+      <li>
+        <button
+          onClick={() => onPreview(file)}
+          className="flex w-full items-center gap-2 rounded-md px-1 py-1 text-left text-sm text-fg-muted hover:bg-surface-3"
+        >
+          <ImageIcon className="h-4 w-4 shrink-0 text-accent" />
+          <span className="truncate">{file.name}</span>
+        </button>
+      </li>
+    );
+  }
+  return (
+    <li className="flex items-center gap-2 px-1 py-1 text-sm text-fg-muted">
+      <FileText className="h-4 w-4 shrink-0 text-fg-subtle" />
+      <span className="truncate">{file.name}</span>
+    </li>
   );
 }
 

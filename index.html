@@ -9,6 +9,21 @@
     />
     <meta name="theme-color" content="#CB2C30" />
     <title>PNW Repair Uploader</title>
+    <!-- Apply the saved/OS theme before first paint to avoid a flash. Mirrors
+         the rules in src/lib/theme.ts — keep them in sync. -->
+    <script>
+      (function () {
+        try {
+          var p = localStorage.getItem("pnw-uploader-theme");
+          var dark =
+            p === "dark" ||
+            (p !== "light" &&
+              window.matchMedia &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          if (dark) document.documentElement.classList.add("dark");
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

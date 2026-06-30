@@ -1,11 +1,14 @@
 import { useMemo, useState } from "react";
 import { X } from "lucide-react";
+import { Portal } from "./Portal";
 
 interface NameImageModalProps {
   /** Default name to pre-fill (e.g. the captured "photo-…jpg"). */
   suggestedName: string;
   /** Thumbnail of the captured/selected image. */
   previewUrl: string;
+  /** Display name of the folder the photo will upload into. */
+  destination: string;
   /** Existing file names in the target folder — used to block duplicates. */
   existingNames: string[];
   /** Called with the final, validated file name (including extension). */
@@ -31,6 +34,7 @@ function splitExt(name: string): { base: string; ext: string } {
 export function NameImageModal({
   suggestedName,
   previewUrl,
+  destination,
   existingNames,
   onConfirm,
   onCancel,
@@ -61,10 +65,11 @@ export function NameImageModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+    <Portal>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-overlay p-4">
       <form
         onSubmit={submit}
-        className="w-full max-w-md rounded-2xl bg-neutral-900 p-5 shadow-2xl ring-1 ring-white/10"
+        className="w-full max-w-md rounded-2xl bg-surface p-5 shadow-2xl ring-1 ring-border"
       >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Name this photo</h2>
@@ -72,7 +77,7 @@ export function NameImageModal({
             type="button"
             onClick={onCancel}
             aria-label="Cancel"
-            className="rounded-full p-2 text-neutral-400 active:bg-white/5"
+            className="rounded-full p-2 text-fg-muted active:bg-surface-3"
           >
             <X className="h-5 w-5" />
           </button>
@@ -86,7 +91,11 @@ export function NameImageModal({
           />
         </div>
 
-        <label className="block text-sm font-medium text-neutral-300" htmlFor="image-name">
+        <p className="mb-3 text-sm text-fg-muted">
+          Saving to <span className="font-medium text-fg">{destination}</span>
+        </p>
+
+        <label className="block text-sm font-medium text-fg-muted" htmlFor="image-name">
           File name
         </label>
         <div className="mt-1 flex items-center gap-2">
@@ -95,15 +104,15 @@ export function NameImageModal({
             autoFocus
             value={base}
             onChange={(e) => setBase(e.target.value)}
-            className="min-w-0 flex-1 rounded-lg border border-white/10 bg-neutral-800 px-3 py-3 text-base outline-none focus:border-accent"
+            className="min-w-0 flex-1 rounded-lg border border-border bg-surface-2 px-3 py-3 text-base outline-none focus:border-accent"
             placeholder="e.g. unit-4412-intake-front"
           />
-          {ext && <span className="shrink-0 text-neutral-500">{ext}</span>}
+          {ext && <span className="shrink-0 text-fg-subtle">{ext}</span>}
         </div>
 
         {/* aria-live so screen readers announce the validation result. */}
         <p
-          className={`mt-2 min-h-[1.25rem] text-sm ${error ? "text-red-400" : "text-neutral-500"}`}
+          className={`mt-2 min-h-[1.25rem] text-sm ${error ? "text-red-500 dark:text-red-400" : "text-fg-subtle"}`}
           aria-live="polite"
         >
           {error ?? "This name is available."}
@@ -113,7 +122,7 @@ export function NameImageModal({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-xl bg-white/10 py-3 font-medium active:scale-[0.98]"
+            className="flex-1 rounded-xl bg-surface-2 py-3 font-medium active:scale-[0.98]"
           >
             Cancel
           </button>
@@ -127,5 +136,6 @@ export function NameImageModal({
         </div>
       </form>
     </div>
+    </Portal>
   );
 }

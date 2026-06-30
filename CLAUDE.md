@@ -11,9 +11,9 @@ The device runs one app full-screen: sign in with Entra (PKCE), pick a
 permitted SharePoint folder, launch the device camera, upload photos into a
 SharePoint document library via Microsoft Graph. Hosted on GitHub Pages.
 
-It is a **sibling** of the ARC platform and deliberately reuses ARC's patterns
-(USE_MOCK boundary, lazy MSAL, Sites.Selected, React Query hooks). It is a
-**separate repo** — no shared code with ARC.
+It is a **standalone app** in its own repository, with no dependency on any
+other project. Its core patterns are the USE_MOCK boundary, lazy MSAL,
+`Sites.Selected`, and React Query hooks.
 
 ## The mock/real boundary (most important rule)
 

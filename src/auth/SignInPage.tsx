@@ -18,7 +18,7 @@ export function SignInPage() {
     <div className="flex h-full flex-col items-center justify-center gap-8 px-6 text-center">
       <div>
         <div className="text-3xl font-bold tracking-tight">PNW Repair Uploader</div>
-        <p className="mt-2 text-sm text-neutral-400">
+        <p className="mt-2 text-sm text-fg-muted">
           Sign in with your Altronic account to upload repair photos.
         </p>
       </div>

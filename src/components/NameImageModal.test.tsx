@@ -16,6 +16,7 @@ function setup(existingNames: string[] = []) {
     <NameImageModal
       suggestedName="photo-20260624.jpg"
       previewUrl="blob:preview"
+      destination="Pictures"
       existingNames={existingNames}
       onConfirm={onConfirm}
       onCancel={onCancel}
