@@ -22,6 +22,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "0.11.1",
+    date: "2026-06-30",
+    changes: [
+      "Error messages now wrap to fit the screen instead of forcing it to scroll sideways.",
+    ],
+  },
+  {
     version: "0.11.0",
     date: "2026-06-24",
     changes: [

@@ -28,9 +28,16 @@ export function FolderPicker({ parentPath, onOpen }: FolderPickerProps) {
   }
   if (isError) {
     return (
-      <p className="p-6 text-center text-red-500 dark:text-red-400">
-        Couldn’t load folders: {(error as Error).message}
-      </p>
+      <div className="mx-auto max-w-md p-6 text-center">
+        <p className="text-sm font-medium text-red-500 dark:text-red-400">
+          Couldn’t load folders.
+        </p>
+        {/* Technical detail, wrapped so a long Graph URL never forces the page
+            to scroll sideways. */}
+        <p className="mt-2 break-words text-xs text-fg-subtle [overflow-wrap:anywhere]">
+          {(error as Error).message}
+        </p>
+      </div>
     );
   }
   if (!visible.length) {

@@ -88,7 +88,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       <div className="flex h-full items-center justify-center px-6 text-center">
         <div className="max-w-sm">
           <h1 className="text-lg font-semibold">Sign-in failed to start</h1>
-          <p className="mt-2 text-sm text-fg-muted">{state.error.message}</p>
+          <p className="mt-2 break-words text-sm text-fg-muted [overflow-wrap:anywhere]">
+            {state.error.message}
+          </p>
           <button
             onClick={() => window.location.reload()}
             className="mt-6 rounded-md bg-accent px-4 py-2 text-sm font-medium text-white"

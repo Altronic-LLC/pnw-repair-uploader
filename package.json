@@ -1,7 +1,7 @@
 {
   "name": "pnw-repair-uploader",
   "private": true,
-  "version": "0.11.0",
+  "version": "0.11.1",
   "type": "module",
   "description": "PNW Repair Uploader — a locked-down kiosk SPA for a SharePoint service account: sign in with Entra, pick a permitted folder, launch the device camera, and upload photos/files into a SharePoint document library via Microsoft Graph.",
   "scripts": {
