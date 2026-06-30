@@ -31,10 +31,10 @@ jobs:
       VITE_SP_DRIVE_ID: ${{ vars.VITE_SP_DRIVE_ID }}
       VITE_SP_ROOT_FOLDER: ${{ vars.VITE_SP_ROOT_FOLDER }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run build
