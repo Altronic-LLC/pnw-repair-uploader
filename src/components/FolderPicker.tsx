@@ -47,20 +47,20 @@ export function FolderPicker({ parentPath, onOpen }: FolderPickerProps) {
   }
 
   return (
-    <ul className="grid grid-cols-1 gap-2 p-3 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="grid auto-rows-fr grid-cols-1 gap-2 p-3 sm:grid-cols-2 lg:grid-cols-3">
       {visible.map((f) => {
         const locked = isFolderLocked(parentPath, f.name);
         if (locked) {
           return (
-            <li key={f.id}>
+            <li key={f.id} className="h-full">
               <div
                 aria-disabled="true"
                 title="Not available on this device"
-                className="flex w-full cursor-not-allowed items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-4 text-left opacity-60"
+                className="flex h-full w-full cursor-not-allowed items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-4 text-left opacity-60"
               >
                 <Folder className="h-6 w-6 shrink-0 text-fg-subtle" />
                 <span className="min-w-0 flex-1">
-                  <span className="block break-words font-medium text-fg-muted">{f.name}</span>
+                  <span className="block break-words text-sm font-medium text-fg-muted">{f.name}</span>
                   <span className="text-xs text-fg-faint">Locked</span>
                 </span>
                 <Lock className="h-4 w-4 shrink-0 text-fg-faint" />
@@ -72,11 +72,11 @@ export function FolderPicker({ parentPath, onOpen }: FolderPickerProps) {
           <li key={f.id}>
             <button
               onClick={() => onOpen(f.path)}
-              className="flex w-full items-center gap-3 rounded-xl border border-border bg-surface px-4 py-4 text-left shadow-sm transition-colors hover:border-fg-faint active:bg-surface-2"
+              className="flex h-full w-full items-center gap-3 rounded-xl border border-border bg-surface px-4 py-4 text-left shadow-sm transition-colors hover:border-fg-faint active:bg-surface-2"
             >
               <Folder className="h-6 w-6 shrink-0 text-accent" />
               <span className="min-w-0 flex-1">
-                <span className="block break-words font-medium">{f.name}</span>
+                <span className="block break-words text-sm font-medium">{f.name}</span>
                 <span className="text-xs text-fg-subtle">{f.childCount} items</span>
               </span>
               <ChevronRight className="h-5 w-5 shrink-0 text-fg-subtle" />

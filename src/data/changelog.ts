@@ -22,6 +22,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "0.12.2",
+    date: "2026-07-01",
+    changes: [
+      "Folder cards are now all the same size and line up evenly, with a slightly smaller name font. Full names still show.",
+    ],
+  },
+  {
     version: "0.12.1",
     date: "2026-07-01",
     changes: [
