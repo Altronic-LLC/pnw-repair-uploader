@@ -60,7 +60,7 @@ export function FolderPicker({ parentPath, onOpen }: FolderPickerProps) {
               >
                 <Folder className="h-6 w-6 shrink-0 text-fg-subtle" />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate font-medium text-fg-muted">{f.name}</span>
+                  <span className="block break-words font-medium text-fg-muted">{f.name}</span>
                   <span className="text-xs text-fg-faint">Locked</span>
                 </span>
                 <Lock className="h-4 w-4 shrink-0 text-fg-faint" />
@@ -76,7 +76,7 @@ export function FolderPicker({ parentPath, onOpen }: FolderPickerProps) {
             >
               <Folder className="h-6 w-6 shrink-0 text-accent" />
               <span className="min-w-0 flex-1">
-                <span className="block truncate font-medium">{f.name}</span>
+                <span className="block break-words font-medium">{f.name}</span>
                 <span className="text-xs text-fg-subtle">{f.childCount} items</span>
               </span>
               <ChevronRight className="h-5 w-5 shrink-0 text-fg-subtle" />
