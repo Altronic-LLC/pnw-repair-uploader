@@ -20,7 +20,7 @@ export const APP_DESCRIPTION = [
 
 export const HOW_IT_WORKS = [
   "Sign in — Entra ID SSO (Authorization Code + PKCE, a public client with no secret). On a kiosk this happens once; the token is cached so the device stays signed in.",
-  "Navigate to a job — the kiosk is locked to the photo workflow: at the top level only _OPEN JOBS is open (other folders show greyed/locked); inside _OPEN JOBS the top 10 job folders are shown; inside a job only its “Job” folder is shown (no files at that level); inside “Job” all files and folders are shown. Files and the Take photo button only appear inside “Job” or below.",
+  "Navigate to a job — the kiosk is locked to the photo workflow: at the top level only _OPEN JOBS is open (other folders show greyed/locked); inside _OPEN JOBS all job folders are shown (the “_”-prefixed template folders are hidden); inside a job only its “Job” folder is shown (no files at that level); inside “Job” all files and folders are shown. Files and the Take photo button only appear inside “Job” or below.",
   "Capture — the in-app camera (getUserMedia live preview → JPEG) takes a photo, with a native file-picker fallback.",
   "Name & validate — a dialog names the file and blocks duplicate names (case-insensitive) and illegal characters before upload.",
   "Upload — small files use a single PUT; large photos use a resumable chunked upload session with a progress bar. Failures show a clear error + Retry.",

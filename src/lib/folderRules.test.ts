@@ -9,12 +9,24 @@ describe("visibleFolders", () => {
     expect(visibleFolders("", folders)).toHaveLength(3);
   });
 
-  it("shows only the top 10 job sub-folders inside _OPEN JOBS", () => {
+  it("shows every job sub-folder inside _OPEN JOBS (no cap)", () => {
     const folders = Array.from({ length: 25 }, (_, i) => f(`JOB ${i}`));
     const visible = visibleFolders("_OPEN JOBS", folders);
-    expect(visible).toHaveLength(10);
-    expect(visible[0]!.name).toBe("JOB 0");
-    expect(visible[9]!.name).toBe("JOB 9");
+    expect(visible).toHaveLength(25);
+  });
+
+  it("hides the '_'-prefixed template folders inside _OPEN JOBS", () => {
+    const folders = [
+      f("_New Job Documents"),
+      f("_New Order Packet"),
+      f("Air Liquide (40043741)"),
+      f("Bayer (40051222)"),
+    ];
+    const visible = visibleFolders("_OPEN JOBS", folders);
+    expect(visible.map((x) => x.name)).toEqual([
+      "Air Liquide (40043741)",
+      "Bayer (40051222)",
+    ]);
   });
 
   it("shows ONLY the Job folder inside a job sub-folder (case-insensitive)", () => {

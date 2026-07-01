@@ -11,8 +11,6 @@ export const OPEN_JOBS_FOLDER = "_OPEN JOBS";
 // The per-job photo folder. Matched case-insensitively — in the real library
 // it's named "Job", but tolerate "JOB"/"job" too.
 export const JOB_FOLDER = "JOB";
-// At the _OPEN JOBS level, only the top N job folders are shown.
-export const OPEN_JOBS_VISIBLE_LIMIT = 10;
 
 function segments(path: string): string[] {
   return path ? path.split("/") : [];
@@ -20,6 +18,15 @@ function segments(path: string): string[] {
 
 function isJobFolder(name: string): boolean {
   return name.toUpperCase() === JOB_FOLDER;
+}
+
+/**
+ * Template/system folders inside _OPEN JOBS use a leading underscore to sort
+ * themselves to the top (e.g. "_New Job Documents", "_New Order Packet").
+ * They aren't actual jobs, so they're hidden from the job list.
+ */
+function isTemplateFolder(name: string): boolean {
+  return name.startsWith("_");
 }
 
 /**
@@ -37,7 +44,8 @@ export function isInsideJob(path: string): boolean {
  * Filter which folders to display when viewing `parentPath`:
  *  - Root: every top-level folder (the non-_OPEN JOBS ones are shown but
  *    locked — see isFolderLocked — not hidden).
- *  - Inside _OPEN JOBS: every job sub-folder.
+ *  - Inside _OPEN JOBS: every job folder (all of them), minus the "_"-prefixed
+ *    template folders.
  *  - Inside a job folder (one level under _OPEN JOBS): ONLY the "JOB" folder.
  *  - Inside "JOB" and deeper: every folder.
  *  - Anywhere outside _OPEN JOBS (not normally reachable): nothing.
@@ -49,7 +57,7 @@ export function visibleFolders<T extends { name: string }>(
   const s = segments(parentPath);
   if (s.length === 0) return folders; // root — locked items handled separately
   if (s[0] !== OPEN_JOBS_FOLDER) return []; // outside open jobs
-  if (s.length === 1) return folders.slice(0, OPEN_JOBS_VISIBLE_LIMIT); // _OPEN JOBS → top 10 jobs
+  if (s.length === 1) return folders.filter((f) => !isTemplateFolder(f.name)); // _OPEN JOBS → all jobs, minus templates
   if (s.length === 2) return folders.filter((f) => isJobFolder(f.name)); // job → JOB only
   return folders; // inside JOB or deeper → all
 }

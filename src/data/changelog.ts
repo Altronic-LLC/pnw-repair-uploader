@@ -22,6 +22,14 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "0.12.0",
+    date: "2026-07-01",
+    changes: [
+      "_OPEN JOBS now lists every open job, not just the first 10.",
+      "Hid the template folders (e.g. _New Job Documents, _New Order Packet) from the job list — only real jobs show.",
+    ],
+  },
+  {
     version: "0.11.1",
     date: "2026-06-30",
     changes: [
